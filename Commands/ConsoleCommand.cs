@@ -1,17 +1,17 @@
-﻿using System.IO;
-
-namespace CommandLineTool
+﻿namespace CommandLineTool
 {
     public abstract class ConsoleCommand
     {
-        protected ConsoleCommand(string name, string help)
+        protected readonly IServiceLocator locator;
+        protected ConsoleCommand(string name, string help, IServiceLocator locator)
         {
             Name = name;
             Help = help;
+            this.locator = locator;
         }
 
         public string Name { get; }
         public string Help { get; }
-        public abstract void Execute(string[] args, TextWriter writer);
+        public abstract void Execute(string[] args);
     }
 }

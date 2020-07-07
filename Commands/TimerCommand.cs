@@ -6,11 +6,13 @@ namespace CommandLineTool
 {
     public class TimerCommand : ConsoleCommand
     {
-        public TimerCommand() : base("timer", "timer <ms>      # starts timer for <ms> milliseconds") 
+        public TimerCommand(IServiceLocator locator) 
+            : base("timer", "timer <ms>      # starts timer for <ms> milliseconds", locator)
         { }
 
-        public override void Execute(string[] args, TextWriter writer)
+        public override void Execute(string[] args)
         {
+            var writer = locator.Get<TextWriter>();
             if (args.Length != 2)
             {
                 writer.WriteLine("Error!");

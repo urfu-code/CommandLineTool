@@ -6,13 +6,17 @@ namespace CommandLineTool
     {
         private static ICommandsExecutor CreateExecutor()
         {
-            // Этот метод — единственное место изменения, при добавлении новой команды
-            var executor = new CommandsExecutor(Console.Out);
-            executor.Register(new PrintTimeCommand());
-            executor.Register(new TimerCommand());
-            executor.Register(new HelpCommand(executor));
-            executor.Register(new DetailedHelpCommand(executor.FindCommandByName));
-            return executor;
+            // Регистрация сервисов в локаторе.
+            // Заметьте, как почти все сервисы зависят от локатора, 
+            // скрывая от программиста настоящие зависимости, которые ранее были видны.
+            var locator = new ServiceLocator();
+            locator.Register(Console.Out);
+            locator.Register<ConsoleCommand>(new PrintTimeCommand(locator));
+            locator.Register<ConsoleCommand>(new TimerCommand(locator));
+            locator.Register<ConsoleCommand>(new HelpCommand(locator));
+            locator.Register<ConsoleCommand>(new DetailedHelpCommand(locator));
+            locator.Register<ICommandsExecutor>(new CommandsExecutor(locator));
+            return locator.Get<ICommandsExecutor>();
         }
 
         static void Main(string[] args)

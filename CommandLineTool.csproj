@@ -43,18 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandsExecutor.cs" />
+    <Compile Include="CommandExecutor\CommandsExecutor.cs" />
     <Compile Include="Commands\ConsoleCommand.cs" />
     <Compile Include="Commands\DetailedHelpCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\PrintTimeCommand.cs" />
     <Compile Include="Commands\TimerCommand.cs" />
-    <Compile Include="ICommandsExecutor.cs" />
+    <Compile Include="CommandExecutor\ICommandsExecutor.cs" />
+    <Compile Include="ServiceLocator\IServiceLocator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceLocator\ServiceLocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

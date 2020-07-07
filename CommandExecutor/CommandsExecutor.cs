@@ -10,24 +10,28 @@ namespace CommandLineTool
     /// </summary>
     public class CommandsExecutor : ICommandsExecutor
     {
-        private readonly TextWriter writer;
         private readonly List<ConsoleCommand> commands = new List<ConsoleCommand>();
+        private readonly IServiceLocator locator;
 
-        public CommandsExecutor(TextWriter writer)
+        public CommandsExecutor(IServiceLocator locator)
         {
-            this.writer = writer;
+            this.locator = locator;
+            RegisterAllCommands();
         }
 
-        public void Register(ConsoleCommand command)
+        private void RegisterAllCommands()
         {
-            commands.Add(command);
+            foreach (var command in locator.GetAll<ConsoleCommand>())
+            {
+                commands.Add(command);
+            }
         }
 
         public string[] GetAvailableCommandName()
         {
             return commands.Select(c => c.Name).ToArray();
         }
-        
+
         public ConsoleCommand FindCommandByName(string name)
         {
             return commands.FirstOrDefault(c => string.Equals(c.Name, name, StringComparison.OrdinalIgnoreCase));
@@ -40,13 +44,13 @@ namespace CommandLineTool
                 Console.WriteLine("Please specify <command> as the first command line argument");
                 return;
             }
-
+            var writer = locator.Get<TextWriter>();
             var commandName = args[0];
             var cmd = FindCommandByName(commandName);
             if (cmd == null)
                 writer.WriteLine("Sorry. Unknown command {0}", commandName);
             else
-                cmd.Execute(args, writer);
+                cmd.Execute(args);
         }
     }
 }
