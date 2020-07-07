@@ -2,12 +2,10 @@
 {
     public abstract class ConsoleCommand
     {
-        protected readonly IServiceLocator locator;
-        protected ConsoleCommand(string name, string help, IServiceLocator locator)
+        protected ConsoleCommand(string name, string help)
         {
             Name = name;
             Help = help;
-            this.locator = locator;
         }
 
         public string Name { get; }
