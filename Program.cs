@@ -2,11 +2,35 @@
 using System.IO;
 using Ninject;
 using Ninject.Extensions.Conventions;
+using Ninject.Modules;
 
 namespace CommandLineTool
 {
+    public class CommandsModule : NinjectModule
+    {
+        public override void Load()
+        {
+            Kernel.Bind(f =>
+            {
+                var commandTypes = f.FromThisAssembly().Select(typeof(ConsoleCommand).IsAssignableFrom);
+                commandTypes.BindAllBaseClasses().Configure(c => c.InSingletonScope());
+            });
+            Kernel.Bind<ICommandsExecutor>().To<CommandsExecutor>().InSingletonScope();
+            Kernel.Bind<TextWriter>().To<PromptConsoleWriter>()
+                .WhenInjectedInto<ConsoleCommand>().InSingletonScope();
+            Kernel.Bind<TextWriter>().To<RedTextConsoleWriter>()
+                .WhenInjectedInto<CommandsExecutor>().InSingletonScope();
+        }
+    }
+
     public class Program
     {
+        private static ICommandsExecutor CreateExecutorUsingModules()
+        {
+            var container = new StandardKernel(new CommandsModule());
+            return container.Get<ICommandsExecutor>();
+        }
+
         private static ICommandsExecutor CreateExecutor()
         {
             var container = new StandardKernel();
@@ -74,7 +98,8 @@ namespace CommandLineTool
 
         static void Main(string[] args)
         {
-            ICommandsExecutor executor = CreateExecutor();
+            //ICommandsExecutor executor = CreateExecutor(); 
+            ICommandsExecutor executor = CreateExecutorUsingModules();
             if (args.Length > 0)
                 executor.Execute(args);
             else
