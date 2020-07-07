@@ -43,6 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandsExecutor.cs" />
+    <Compile Include="Commands\ConsoleCommand.cs" />
+    <Compile Include="Commands\DetailedHelpCommand.cs" />
+    <Compile Include="Commands\HelpCommand.cs" />
+    <Compile Include="Commands\PrintTimeCommand.cs" />
+    <Compile Include="Commands\TimerCommand.cs" />
+    <Compile Include="ICommandsExecutor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
